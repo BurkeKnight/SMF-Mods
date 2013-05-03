@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Started By Column
+* @version 1.42
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:StartedByColumn</id>
+	<version>1.42</version>
+
+	<file name="$themedir/MessageIndex.template.php">
+		<operation>
+			<search position="replace"><![CDATA[<th scope="col" class="lefttext"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+]]></search>
+			<add><![CDATA[<th scope="col" class="lefttext"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+ 					<th scope="col" width="15%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<td colspan="', !empty($context['can_quick_mod']) ? '6' : '5', '" class="smalltext">';
+]]></search>
+			<add><![CDATA[<td colspan="', !empty($context['can_quick_mod']) ? '7' : '6', '" class="smalltext">';
+]]></add>
+		</operation>
+		
+		<operation>
+			<search position="replace"><![CDATA[<p>', $txt['started_by'], ' ', $topic['first_post']['member']['link'], '
+								<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+							</p>
+						</div>
+					</td>]]></search>
+			<add><![CDATA[<p>
+								<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+							</p>
+						</div>
+					</td>
+					<td class="stats ', $color_class, '">
+						', $topic['first_post']['member']['link'], '
+ 					</td>]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<td colspan="6" align="right">
+]]></search>
+			<add><![CDATA[<td colspan="7" align="right">
+]]></add>
+		</operation>
+	</file>	
+	
+	
+	<file name="$themedir/Recent.template.php">
+		<operation>
+			<search position="before"><![CDATA[<th scope="col">
+								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
+							</th>]]></search>
+			<add><![CDATA[<th scope="col" width="15%" align="center">
+								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
+							</th>]]></add>
+		</operation>		
+		<operation>
+			<search position="replace"><![CDATA[<p>
+										', $txt['started_by'], ' <strong>', $topic['first_post']['member']['link'], '</strong>
+										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
+										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
+									</p>
+								</div>
+							</td>]]></search>
+			<add><![CDATA[<p>
+										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
+										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
+									</p>
+								</div>
+							</td>
+							<td class="stats windowbg ', $color_class, '">
+								', $topic['first_post']['member']['link'], '
+							</td>]]></add>
+		</operation>		
+		<operation>
+			<search position="before"><![CDATA[<th scope="col">
+								<a href="', $scripturl, '?action=unreadreplies', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] === 'subject' && $context['sort_direction'] === 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] === 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
+							</th>]]></search>
+			<add><![CDATA[<th scope="col" width="15%" align="center">
+							<a href="', $scripturl, '?action=unreadreplies', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
+						</th>]]></add>
+		</operation>		
+		<operation>
+			<search position="replace"><![CDATA[<p>
+										', $txt['started_by'], ' <strong>', $topic['first_post']['member']['link'], '</strong>
+										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
+										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
+									</p>
+								</div>
+							</td>]]></search>
+			<add><![CDATA[<p>
+										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
+										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
+									</p>
+								</div>
+							</td>
+							<td class="', $color_class, ' stats windowbg">
+								', $topic['first_post']['member']['link'], '
+							</td>]]></add>
+		</operation>		
+	</file>
+	
+</modification>
