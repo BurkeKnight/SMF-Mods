@@ -11,4 +11,9 @@ For example if you want to remove category 1 and 2 from the list, just put the c
 Same goes for boards and topics also.
 
 
+Update - 
+1. You can also hide the topics by clicking "Hide" button within the topics. One can unhide/undo the topic using the same button.
+2. You can set permission for each member group who can access the hide button in topics. To adjust the permission go to permission section in admin panel and set the permission for each group separately.
+
+
 - Note: This mod only hides the items in the recent post listing that is shown on the board index.

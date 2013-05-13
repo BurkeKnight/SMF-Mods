@@ -33,7 +33,7 @@ elseif(!defined('SMF'))
 	die('<b>Error:</b> Cannot install - please verify you put this file in the same place as SMF\'s SSI.php.');
 
 $integrations = array(
-	'integrate_pre_include' => 'Sources/addHooks.php',
+	'integrate_pre_include' => 'Sources/HideTopicHooks.php',
 	'integrate_load_permissions' => 'hideTopicsPermissions',
 	'integrate_display_buttons' => 'addHideButton',
 );
