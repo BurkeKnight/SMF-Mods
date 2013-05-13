@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for Hiding posts from recent posts
+ * @version 1.2
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Contributor(s):
+ * Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Helped in updating the mod for SMF 2.x branch
+ */
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:hide_recent</id>
+	<version>1.2</version>
+
+	<file name="$sourcedir/Admin.php">
+		<operation>
+			<search position="before"><![CDATA[// Note the comma!! The setting with automatically appear with the first mod to be added.]]></search>
+			<add><![CDATA[
+						'hide' => array($txt['hide']),]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/ManageSettings.php">
+		<operation>
+			<search position="before"><![CDATA[// Mod authors, once again, if you have a whole section to add do it AFTER this line, and keep a comma at the end.]]></search>
+			<add><![CDATA[
+		'hide' => 'RecentSettings',]]></add>
+		</operation>
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+function RecentSettings($return_config = false)
+{
+	global $txt, $scripturl, $context, $modSettings, $user_info;
+
+	$config_vars = array(
+		array('text', 'hide_categories'),
+		array('text', 'hide_boards'),
+		array('text', 'hide_topics', 'subtext' => $txt['guide_hide']),
+	);
+	
+	if ($return_config)
+		return $config_vars;
+
+	if (isset($_GET['save']))
+	{
+	// check for bad input in the admin panel
+	foreach ($config_vars as $key => $hide_area)
+	{
+		if (is_array($hide_area) && !empty($_POST[$hide_area[1]]) && $hide_area[0] == 'text')
+		{
+			$checked = array();
+			$temp = explode(',',$_POST[$hide_area[1]]);
+			foreach ($temp as $check)
+			{
+				if (((string)(int) $check) == ((string) $check))
+					$checked[] = $check;
+			}
+			$_POST[$hide_area[1]] = implode(',',$checked);
+		}
+	}
+ 
+		checkSession();
+		saveDBSettings($config_vars);
+		cache_put_data('boardindex-latest_posts:' . md5($user_info['query_wanna_see_board'] . $user_info['language']),null,120);
+		redirectexit('action=admin;area=modsettings;sa=hide');
+	}
+	
+	$context['post_url'] = $scripturl . '?action=admin;area=modsettings;save;sa=hide';
+	$context['settings_title'] = $txt['hide'];
+
+	prepareDBSettingContext($config_vars);
+}
+]]></add>
+		</operation>
+	</file>
+	
+
+	<file name="$sourcedir/Subs-Recent.php">
+		<operation>
+			<search position="replace"><![CDATA[			AND b.id_board != {int:recycle_board}' : '') . ']]></search>
+			<add><![CDATA[			AND b.id_board != {int:recycle_board}' : '') . 
+			(!empty($modSettings['hide_categories']) ? ' AND b.id_cat NOT IN ({array_int:hide_categories})' : '') .
+			(!empty($modSettings['hide_boards']) ? ' AND b.id_board NOT IN ({array_int:hide_boards})' : '') .
+			(!empty($modSettings['hide_topics']) ? ' AND t.id_topic NOT IN ({array_int:hide_topics})' : '') .']]></add>
+		</operation>		
+		<operation>
+			<search position="before"><![CDATA[			'recycle_board' => $modSettings['recycle_board'],]]></search>
+			<add><![CDATA[
+			'hide_categories' => (!empty($modSettings['hide_categories']) ? explode(',',$modSettings['hide_categories']) : ''),
+			'hide_boards' => (!empty($modSettings['hide_boards']) ? explode(',',$modSettings['hide_boards']) : ''),
+			'hide_topics' => (!empty($modSettings['hide_topics']) ? explode(',',$modSettings['hide_topics']) : ''),]]></add>
+		</operation>
+	</file>	
+
+	<file name="$languagedir/Modifications.english.php">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+$txt['hide'] = 'Recent Posts Setting';
+$txt['hide_categories'] = 'Hide these <i><b>categories</b></i> in Recent Posts';
+$txt['hide_boards'] = 'Hide these <i><b>boards</b></i> in Recent Posts';
+$txt['hide_topics'] = 'Hide these <i><b>topics</b></i> in Recent Posts';
+$txt['guide_hide'] = 'Separate the ids with comma and don\'t leave any space';
+$txt['hide_topic'] = 'Hide topic';
+$txt['unhide_topic'] = 'Unhide topic';
+$txt['topic_hidden'] = 'This topic has been hidden successfully from recent posts.';
+$txt['topic_unhidden'] = 'This topic has been shown successfully on recent posts.';
+
+$txt['permissionname_hidetopics_manage'] = 'Manage Hide Topics';
+$txt['permissiongroup_hidetopics'] = 'Hide Topics';
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$boarddir/index.php">
+		<operation>
+			<search position="before"><![CDATA['helpadmin' => array('Help.php', 'ShowAdminHelp'),]]></search>
+			<add><![CDATA[
+		'hidetopic' => array('HideTopic.php', 'HideTopic'),]]></add>
+		</operation>
+	</file>
+
+	<file name="$themedir/Display.template.php">
+		<operation>
+			<search position="after"><![CDATA[// Allow adding new buttons easily.]]></search>
+			<add><![CDATA[
+	if(allowedTo('hidetopics_manage')) {
+		$normal_buttons += array(
+				'hide_topic' => array('text' => $context['hidden_state'], 'image' => 'print.gif', 'lang' => true, 'custom' => 'rel="new_win nofollow"', 'url' => $scripturl . '?action=hidetopic;topic=' . $context['current_topic'] . '.0;' . $context['hidden_state']),
+		);
+	}
+	]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[if ($context['report_sent'])
+	{
+		echo '
+			<div class="windowbg" id="profile_success">
+				', $txt['report_sent'], '
+			</div>';
+	}
+]]></search>
+			<add><![CDATA[
+	if ($context['post_hidden'])
+	{
+		echo '
+			<div class="windowbg" id="profile_success">
+				', $txt['topic_hidden'], '
+			</div>';
+	}
+
+	if($context['post_unhidden']) {
+		echo '
+			<div class="windowbg" id="profile_success">
+				', $txt['topic_unhidden'], '
+			</div>';
+	}
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/Display.php">
+		<operation>
+			<search position="before"><![CDATA[$context['report_sent'] = isset($_GET['reportsent']);]]></search>
+			<add><![CDATA[
+	$context['post_hidden'] = isset($_GET['posthidden']);
+	$context['post_unhidden'] = isset($_GET['postunhidden']);
+		$context['hidden_state'] = isset($modSettings['hide_topics']) && !empty($modSettings['hide_topics']) ? (in_array($topic, explode(',', $modSettings['hide_topics'])) ? 'unhide_topic' : 'hide_topic') : 'hide_topic' ;
+]]></add>
+		</operation>
+	</file>
+
+</modification>
