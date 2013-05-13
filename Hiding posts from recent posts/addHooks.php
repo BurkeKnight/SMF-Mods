@@ -39,4 +39,12 @@ function hideTopicsPermissions(&$permissionGroups, &$permissionList)
 	);
 }
 
+function addHideButton(&$normal_buttons) {
+	global $context, $scripturl;
+
+	if(allowedTo('hidetopics_manage')) {
+			$normal_buttons = array_merge($normal_buttons, array('hide_topic' => array('text' => $context['hidden_state'], 'image' => 'print.gif', 'lang' => true, 'custom' => 'rel="new_win nofollow"', 'url' => $scripturl . '?action=hidetopic;topic=' . $context['current_topic'] . '.0;' . $context['hidden_state'])));
+	}
+}
+
 ?>

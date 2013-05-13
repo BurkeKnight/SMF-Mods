@@ -13,6 +13,7 @@ elseif(!defined('SMF'))
 $integrations = array(
 	'integrate_pre_include' => 'addHooks.php',
 	'integrate_load_permissions' => 'hideTopicsPermissions',
+    'integrate_display_buttons' => 'addHideButton',
 );
 
 foreach ($integrations as $hook => $function)
