@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:vbstyleboardindex</id>
+	<name>VB Style Board Index</name>
+	<version>1.9.2</version>
+	<type>modification</type>
+
+	<install for="1.1 - 1.1.99">
+		<modification>install1x.xml</modification>
+		<readme>readme.txt</readme>
+		<redirect url="?action=packages" type="inline">Please stand by while you are being redirected to this modification's configuration settings.</redirect>
+	</install>
+
+	<uninstall for="1.1 - 1.1.99">
+		<modification type="file" reverse="true">install1x.xml</modification>
+		<redirect url="?action=packages;sa=browse" timeout="1000" />
+	</uninstall>
+
+	<install for="2.0 - 2.0.99">
+		<modification>install2x.xml</modification>
+		<readme>readme.txt</readme>
+		<redirect url="?action=admin;area=packages" type="inline">Please stand by while you are being redirected to this modification's configuration settings.</redirect>
+	</install>
+
+	<uninstall for="2.0 - 2.0.99">
+		<modification type="file" reverse="true">install2x.xml</modification>
+		<redirect url="?action=admin;area=packages;sa=browse" timeout="1000" />
+	</uninstall>
+</package-info>

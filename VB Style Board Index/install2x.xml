@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Vbulletin Style Board Index
+* @version 1.9.2
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	
+	<id>sid2varun:vbstyleboardindex</id>
+	<version>1.9.2</version>
+
+	<file name="$themedir/BoardIndex.template.php">
+		<operation>
+			<search position="replace"><![CDATA[					<td colspan="4">
+]]></search>
+			<add><![CDATA[					<td colspan="5">
+]]></add>
+		</operation>
+		
+		
+		<operation>
+			<search position="before"><![CDATA[			<tbody class="content" id="category_', $category['id'], '_boards">]]></search>
+			<add><![CDATA[
+            <tr style="line-height:8px;">
+				<td align="center" class="windowbg"><strong>', $txt['status'],'</strong></td>
+				<td align="left" class="windowbg"><strong>', $txt['board'],'</strong></td>
+				<td align="center" class="windowbg"><strong>', $txt['posts'],'</strong></td>
+				<td align="center" class="windowbg"><strong>', $txt['topics'],'</strong></td>
+				<td align="center" class="windowbg"><strong>', $txt['last_post'],'</strong></td>
+            </tr>]]></add>
+		</operation>
+
+		<operation>
+			<search position="replace"><![CDATA[// Show some basic information about the number of posts, etc.
+					echo '
+					</td>
+					<td class="stats windowbg">
+						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
+						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
+						</p>
+					</td>
+					<td class="lastpost">';
+]]></search>
+			<add><![CDATA[			// Show some basic information about the number of posts, etc.
+            echo '
+               </td>';
+
+            if ($board['is_redirect'])
+			echo '
+				<td class="windowbg" align="center" colspan="2" width="14%"><p>', $board['posts']. ' '. $txt['redirects'] , ' </p></td>
+				<td class="lastpost">';
+			else
+			echo '
+				<td class="windowbg" align="center" width="7%">', comma_format($board['posts']),'</td>
+				<td class="windowbg" align="center" width="7%">', comma_format($board['topics']),'</td>
+				<td class="lastpost">';
+]]></add>
+		</operation>
+
+		<operation>
+			<search position="replace"><![CDATA[						<td colspan="3" class="children windowbg">
+]]></search>
+			<add><![CDATA[						<td colspan="4" class="children windowbg">
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$themedir/MessageIndex.template.php">
+		<operation>
+			<search position="after"><![CDATA[		foreach ($context['boards'] as $board)
+]]></search>
+			<add><![CDATA[
+		echo '
+            <tr style="line-height:8px;">
+            <td align="center" class="windowbg"><strong>', $txt['status'],'</strong></td>
+            <td align="left" class="windowbg"><strong>', $txt['board'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['posts'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['topics'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['last_post'],'</strong></td>
+            </tr>';
+
+]]></add>
+		</operation>
+
+		<operation>
+			<search position="replace"><![CDATA[			// Show some basic information about the number of posts, etc.
+			echo '
+					</td>
+					<td class="stats windowbg">
+						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
+						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
+						</p>
+					</td>
+					<td class="lastpost">';
+]]></search>
+			<add><![CDATA[// Show some basic information about the number of posts, etc.
+            echo '
+               </td>';
+
+			if ($board['is_redirect'])
+			echo '
+				<td class="windowbg" align="center" colspan="2" width="14%"><p>', $board['posts']. ' '. $txt['redirects'] , ' </p></td>
+				<td class="lastpost">';
+			else
+			echo '
+				<td class="windowbg" align="center" width="7%">', comma_format($board['posts']),'</td>
+				<td class="windowbg" align="center" width="7%">', comma_format($board['topics']),'</td>
+				<td class="lastpost">';
+]]></add>
+		</operation>
+	</file>
+</modification>
