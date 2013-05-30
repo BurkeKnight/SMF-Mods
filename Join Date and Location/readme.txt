@@ -1,5 +1,9 @@
 It shows Join Date and location of user in his profile on Posts and Presonal Messages . Admins can enable or disable the feature through Modification Settings area in Admin Panel.
 
+Options related to modification can be found here
+Modification Settings » Miscellaneous (and choose option you want to enable).
+
+
 License
  * This SMF Modification is subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this SMF modification except in compliance with
