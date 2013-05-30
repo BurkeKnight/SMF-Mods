@@ -1,4 +1,4 @@
-Vb Style User Profile In Posts
+New Layout for Last Post Info
 
 This mod will provide a more arranged look to last post column on board index.
 

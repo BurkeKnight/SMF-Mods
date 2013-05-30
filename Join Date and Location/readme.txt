@@ -1,0 +1,1 @@
+It shows Join Date and location of user in his profile on Posts and Presonal Messages . Admins can enable or disable the feature through Modification Settings area in Admin Panel.
