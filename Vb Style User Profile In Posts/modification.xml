@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for VB style User profile in Posts
+* @version 1.41
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:vbstyleprofileinpost</id>
+	<version>1.41</version>
+
+	<file name="$themedir/Display.template.php">
+		<operation>
+			<search position="replace"><![CDATA[<div class="poster">]]></search>
+			<add><![CDATA[<div class="poster rc15">]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<li class="title">', $message['member']['title'], '</li>';]]></search>
+			<add><![CDATA[<li class="rc5">', $message['member']['title'], '</li>';]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<li class="membergroup">', $message['member']['group'], '</li>';]]></search>
+			<add><![CDATA[<li class="rc5">', $message['member']['group'], '</li>';]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<li class="postgroup">', $message['member']['post_group'], '</li>';]]></search>
+			<add><![CDATA[<li class="rc5">', $message['member']['post_group'], '</li>';]]></add>
+		</operation>	
+		<operation error="ignore">
+			<search position="replace"><![CDATA[<li class="avatar" style="overflow: auto;">
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										', $message['member']['avatar']['image'], '
+									</a>
+								</li>';]]></search>
+			<add><![CDATA[<li class="rc5 avatardisplay">
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										', $message['member']['avatar']['image'], '
+									</a>
+								</li>';]]></add>
+		</operation>
+		<operation error="ignore">
+			<search position="replace"><![CDATA[<li class="avatar">
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										', $message['member']['avatar']['image'], '
+									</a>
+								</li>';]]></search>
+			<add><![CDATA[<li class="rc5 avatardisplay"><!-- RC4 -->
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										', $message['member']['avatar']['image'], '
+									</a>
+								</li>';]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<li class="postcount">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';]]></search>
+			<add><![CDATA[<li class="rc5">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';]]></add>
+		</operation>	
+		<operation>
+			<search position="replace"><![CDATA[
+			// Is karma display enabled?  Total or +/-?
+			if ($modSettings['karmaMode'] == '1')
+				echo '
+								<li class="karma">', $modSettings['karmaLabel'], ' ', $message['member']['karma']['good'] - $message['member']['karma']['bad'], '</li>';
+			elseif ($modSettings['karmaMode'] == '2')
+				echo '
+								<li class="karma">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
+
+			// Is this user allowed to modify this member's karma?
+			if ($message['member']['karma']['allow'])
+				echo '
+								<li class="karma_allow">
+									<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
+									<a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>
+								</li>';]]></search>
+			<add><![CDATA[
+			// Is karma display enabled?  Total or +/-?
+			if ($modSettings['karmaMode'] == '1')
+				echo '
+								<li class="rc5">', $modSettings['karmaLabel'], ' ', $message['member']['karma']['good'] - $message['member']['karma']['bad'];
+			elseif ($modSettings['karmaMode'] == '2')
+				echo '
+								<li class="rc5">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'];
+
+			// Is this user allowed to modify this member's karma?
+			if ($message['member']['karma']['allow'])
+				echo '
+									<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
+									<a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>';
+								
+			if (($modSettings['karmaMode'] == '1') || ($modSettings['karmaMode'] == '2'))
+				echo '
+								</li>';
+]]></add>
+		</operation>	
+		<operation>
+			<search position="replace"><![CDATA[<li class="blurb">', $message['member']['blurb'], '</li>';]]></search>
+			<add><![CDATA[<li class="rc5">', $message['member']['blurb'], '</li>';]]></add>
+		</operation>
+	</file>
+	
+	<file name="$themedir/css/index.css">
+      <operation>
+         <search position="end" />
+         <add><![CDATA[
+/* VB Style User Profile In Posts */
+.rc5 {
+	background: none repeat scroll 0 0 #FCFCFC;
+	border-top: 1px solid #000;
+	border-left: 1px solid #000;
+	border-right: 1px solid #C1CDCD;
+	border-bottom: 1px solid #C1CDCD;
+	padding: 2px;
+	text-align: center;
+	width: 94%;
+}
+.rc15 {
+	margin: 0 auto;
+	padding: 0px;
+	background-color: #DFE3EB;
+	border: 1px solid #8d97c6;
+}
+.avatardetail {
+	overflow: none;
+	width: 130px;
+}]]></add>
+      </operation>
+   </file>
+   
+   	<file name="$sourcedir/Load.php">
+		<operation>
+			<search position="after"><![CDATA[
+	// Set some permission related settings.]]></search>
+			<add><![CDATA[
+    if (isset($settings['user_display']) && $settings['user_display'] == 1)
+        $context['html_headers'] .= '
+    <script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/rounded-corners-min.js"></script>';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$themedir/Settings.template.php">
+		<operation>
+			<search position="before"><![CDATA[array(
+			'id' => 'hide_post_group',
+			'label' => $txt['hide_post_group'],
+			'description' => $txt['hide_post_group_desc'],
+		),]]></search>
+			<add><![CDATA[
+		array(
+			'id' => 'user_display',
+			'label' => $txt['user_display'],
+			'options' => array(
+				0 => $txt['user_display_plain'],
+				1 => $txt['user_display_curve'],
+			),
+			'type' => 'number',
+		),
+]]></add>
+		</operation>
+	</file>
+   
+</modification>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:vbstyleprofileinpost</id>
+	<name>VB Style User Profile In Posts</name>
+	<version>1.41</version>
+	<type>modification</type>
+
+	<install for="2.0 - 2.0.99">
+		<modification>modification.xml</modification>
+		<modification>languages.xml</modification>
+		<modification>languages-utf8.xml</modification>
+		<require-file name="rounded-corners-min.js" destination="$themedir/scripts" />
+		<redirect url="$scripturl?action=admin;area=theme;sa=settings;th=1" timeout="1000" />
+	</install>
+
+	<uninstall for="2.0 - 2.0.99">
+		<modification reverse="true">modification.xml</modification>
+		<modification reverse="true">languages.xml</modification>
+		<modification reverse="true">languages-utf8.xml</modification>
+		<remove-file name="$themedir/scripts/rounded-corners-min.js" />
+		<redirect url="$scripturl?action=admin;area=packages;sa=browse" timeout="1000" />
+	</uninstall>
+	
+</package-info>
