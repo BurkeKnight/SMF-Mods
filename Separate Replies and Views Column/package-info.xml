@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:vbstylemessgaeindex</id>
+	<name>Separate Replies and Views Column</name>
+	<version>1.9.2</version>
+	<type>modification</type>
+
+	<install for="2.0 - 2.0.99">
+		<readme type="file" parsebbc="true">readme.txt</readme>
+		<modification>modification.xml</modification>
+		<modification>modification_yagam.xml</modification>
+		<redirect url="?action=admin;area=packages" type="inline">Please stand by while you are being redirected to this modification's configuration settings.</redirect>
+	</install>
+
+	<uninstall for="2.0 - 2.0.99">
+		<modification reverse="true">modification.xml</modification>
+		<modification reverse="true">modification_yagam.xml</modification>
+		<redirect url="?action=admin;area=packages;sa=browse" timeout="1000" />
+	</uninstall>
+</package-info>

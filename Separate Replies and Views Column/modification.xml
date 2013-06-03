@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Separate Replies and Views Column
+* @version 1.9.2
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	
+	<id>sid2varun:vbstylemessgaeindex</id>
+	<version>1.9.2</version>
+
+	<file name="$themedir/MessageIndex.template.php">
+		
+	<operation>
+			<search position="after"><![CDATA[		foreach ($context['boards'] as $board)
+]]></search>
+			<add><![CDATA[			echo '
+            <tr style="line-height:7px;">
+            <td align="center" class="windowbg"><strong>', $txt['status'],'</strong></td>
+            <td align="left" class="windowbg"><strong>', $txt['board'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['topics'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['posts'],'</strong></td>
+            <td align="center" class="windowbg"><strong>', $txt['last_post'],'</strong></td>
+            </tr>';
+]]></add>
+		</operation>	
+		
+		
+		<operation>
+			<search position="replace"><![CDATA[			// Show some basic information about the number of posts, etc.
+			echo '
+					</td>
+					<td class="stats windowbg">
+						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
+						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
+						</p>
+					</td>
+					<td class="lastpost">';
+]]></search>
+			<add><![CDATA[			// Show some basic information about the number of posts, etc.			
+				echo '
+					</td>';
+			if ($board['is_redirect'])
+				echo '
+					<td class="windowbg" align="center" colspan="2" width="14%"><p>', $board['posts']. ' '. $txt['redirects'] , ' </p></td>';
+			else
+				echo '
+					<td class="windowbg" align="center" width="7%">', comma_format($board['topics']),'</td>
+					<td class="windowbg" align="center" width="7%">', comma_format($board['posts']),'</td>';
+]]></add>
+		</operation>
+		
+		
+		<operation>
+			<search position="replace"><![CDATA[			/* The board's and children's 'last_post's have:
+			time, timestamp (a number that represents the time.), id (of the post), topic (topic id.),
+			link, href, subject, start (where they should go for the first unread post.),
+			and member. (which has id, name, link, href, username in it.) */
+			if (!empty($board['last_post']['id']))
+				echo '
+						<p><strong>', $txt['last_post'], '</strong>  ', $txt['by'], ' ', $board['last_post']['member']['link'], '<br />
+						', $txt['in'], ' ', $board['last_post']['link'], '<br />
+						', $txt['on'], ' ', $board['last_post']['time'],'
+						</p>';
+]]></search>
+			<add><![CDATA[		// The board's and children's 'last_post's
+				echo '<td class="lastpost">';
+			if (!empty($board['last_post']['id']))
+				echo '
+					<p><strong>', $txt['last_post'], '</strong>  ', $txt['by'], ' ', $board['last_post']['member']['link'], '<br />
+						', $txt['in'], ' ', $board['last_post']['link'], '<br />
+						', $txt['on'], ' ', $board['last_post']['time'],'
+					</p>';
+				echo '
+					</td>';
+]]></add>
+		</operation>
+
+	
+	<operation>
+			<search position="replace"><![CDATA[				<tr id="board_', $board['id'], '_children"><td colspan="3" class="children windowbg"><strong>', $txt['parent_boards'], '</strong>: ', implode(', ', $children), '</td></tr>';
+]]></search>
+			<add><![CDATA[				<tr id="board_', $board['id'], '_children"><td colspan="4" class="children windowbg"><strong>', $txt['parent_boards'], '</strong>: ', implode(', ', $children), '</td></tr>';
+]]></add>
+		</operation>
+
+		
+		<operation>
+			<search position="replace"><![CDATA[					<th scope="col" class="first_th" width="8%" colspan="2">&nbsp;</th>
+					<th scope="col" class="lefttext"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+					<th scope="col" width="14%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+]]></search>
+			<add><![CDATA[<th scope="col" class="first_th" width="8%" colspan="2">&nbsp;</th>
+							<th scope="col" class="lefttext"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+]]></add>
+		</operation>
+		
+		
+		<operation>
+			<search position="replace"><![CDATA[			// Show a "select all" box for quick moderation?
+			if (empty($context['can_quick_mod']))
+				echo '
+					<th scope="col" class="lefttext last_th" width="22%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+			else
+				echo '
+					<th scope="col" class="lefttext" width="22%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+
+]]></search>
+			<add><![CDATA[// Show a "select all" box for quick moderation?
+			if (empty($context['can_quick_mod']))
+				echo '
+							<th scope="col" width="7%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" width="7%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" class="lefttext last_th" width="22%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+
+			
+			else
+				echo '
+							<th scope="col" width="7%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" width="7%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+							<th scope="col" class="lefttext" width="22%"><a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';			
+]]></add>
+		</operation>
+		
+		
+		<operation>
+			<search position="replace"><![CDATA[<td colspan="', !empty($context['can_quick_mod']) ? '6' : '5', '" class="smalltext">';]]></search>
+			<add><![CDATA[<td colspan="', !empty($context['can_quick_mod']) ? '7' : '6', '" class="smalltext">';]]></add>
+		</operation>
+		
+		
+		<operation>
+			<search position="replace"><![CDATA[<td class="stats ', $color_class, '">
+						', $topic['replies'], ' ', $txt['replies'], '
+						<br />
+						', $topic['views'], ' ', $txt['views'], '
+					</td>
+					<td class="lastpost ', $alternate_class, '">
+						<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt['last_post'], '" title="', $txt['last_post'], '" /></a>
+						', $topic['last_post']['time'], '<br />
+						', $txt['by'], ' ', $topic['last_post']['member']['link'], '
+					</td>';
+]]></search>
+			<add><![CDATA[<td class="stats ', $color_class, '">
+						', $topic['replies'],'
+					</td>
+					<td class="stats ', $color_class, '">
+						', $topic['views'],'
+					</td>
+					<td class="lastpost ', $alternate_class, '">
+						<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt['last_post'], '" title="', $txt['last_post'], '" /></a>
+						', $topic['last_post']['time'], '<br />
+						', $txt['by'], ' ', $topic['last_post']['member']['link'], '
+					</td>';
+]]></add>
+		</operation>
+		
+		<operation>
+				<search position="replace"><![CDATA[<td colspan="6" align="right">
+]]></search>
+<add><![CDATA[<td colspan="7" align="right">
+]]></add>
+		</operation>
+	</file>
+</modification>

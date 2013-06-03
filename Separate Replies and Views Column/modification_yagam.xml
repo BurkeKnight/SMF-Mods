@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Separate Replies and Views Column
+* @version 1.9.2
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	
+	<id>sid2varun:vbstylemessgaeindex</id>
+	<version>1.9.2</version>
+
+	<file name="$themedir/MessageIndex.template.php">
+		<operation  error="ignore">
+			<search position="replace"><![CDATA[', ($announcement['can_comment'] == '1') ? ''.$announcement['comment_total'].' ' . $txt['replies'] : '--', '<br />
+						',$announcement['views'], ' ' . $txt['views']. '
+]]></search>
+			<add><![CDATA[', ($announcement['can_comment'] == '1') ? ''.$announcement['comment_total'].' ' . $txt['replies'] : '--', '<br />
+				    </td>	
+					<td class="stats yagam">
+						',$announcement['views'], ' ' . $txt['views']. ' 
+]]></add>
+		</operation>
+	</file>
+</modification>
