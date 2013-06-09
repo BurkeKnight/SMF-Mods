@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for Minimum characters for search
+ * @version 1.2.1
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ * Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Portions created by the Initial Developer are Copyright (C) 2011
+ * the Initial Developer. All Rights Reserved.
+ *
+ */
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+	<id>sid2varun:MinCharReqSearch</id>
+	<version>1.2.1</version>
+	
+	<file name="$languagedir/Errors.english-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search
+$txt['error_search_string_small_words'] = 'Minimum characters required in each word for search are ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.english-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search
+$txt['search_min_char'] = 'Number of minimum characters required for search';
+$txt['default_search_min_char'] = '(By default minimum characters required are 2)';
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$languagedir/Errors.russian-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search
+$txt['error_search_string_small_words'] = 'Минимальное количество символов для поиска: ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.russian-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search
+$txt['search_min_char'] = 'Минимальное количество символов для поиска';
+$txt['default_search_min_char'] = '(По умолчанию &mdash; 2)';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Errors.turkish-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['error_search_string_small_words'] = 'Minimum karakter arama iÃ§in her kelimenin gerekli ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.turkish-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['search_min_char'] = 'Arama iÃ§in gereken minimum karakter sayÄ±sÄ± gerekli';
+$txt['default_search_min_char'] = '(VarsayÄ±lan minimium karekter sayÄ±sÄ± en az iki)';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Errors.german-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['error_search_string_small_words'] = 'Minimum an Zeichen in jedem Wort für die Suche erforderlich sind ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.german-utf8.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['search_min_char'] = 'Anzahl der Zeichen minimum für die Suche erforderlich.';
+$txt['default_search_min_char'] = '(Standardmäßig Zeichen sind minimum 2 erforderlich.)';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Errors.turkish.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['error_search_string_small_words'] = 'Minimum karakter arama için her kelimenin gerekli ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.turkish.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['search_min_char'] = 'Arama için gereken minimum karakter sayısı gerekli';
+$txt['default_search_min_char'] = '(Varsayılan minimium karekter sayısı en az iki)';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Errors.german.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['error_search_string_small_words'] = 'Minimum an Zeichen in jedem Wort für die Suche erforderlich sind ';
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$languagedir/Search.german.php" error="skip">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+// Minimum Characters for Search (translation by SirtLanVadisi.nett)
+$txt['search_min_char'] = 'Anzahl der Zeichen minimum für die Suche erforderlich';
+$txt['default_search_min_char'] = '(Standardmäßig Zeichen sind minimum 2 erforderlich)';
+]]></add>
+		</operation>
+	</file>
+
+</modification>

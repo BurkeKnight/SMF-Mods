@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:minimumcharreqinsearch</id>
+	<name>Minimum Characters for Search</name>
+	<version>1.2.1</version>
+	<type>modification</type>
+	
+	<install for="1.1 - 1.1.99">
+		<modification>install1x.xml</modification>
+		<modification>languages.xml</modification>
+		<modification>languages-utf8.xml</modification>
+		<code>install.php</code>
+		<redirect url="$scripturl?action=managesearch" timeout="1000" />
+	</install>
+	
+	<uninstall for="1.1 - 1.1.99">
+		<modification reverse="true">install1x.xml</modification>
+		<modification reverse="true">languages.xml</modification>
+		<modification reverse="true">languages-utf8.xml</modification>
+		<redirect url="$scripturl?action=packages;sa=browse" timeout="1000" />
+	</uninstall>
+	
+	<install for="2.0 - 2.0.99">
+		<modification>install2x.xml</modification>
+		<modification>languages.xml</modification>
+		<modification>languages-utf8.xml</modification>
+		<code>install.php</code>
+		<redirect url="$scripturl?action=admin;area=managesearch;sa=settings" timeout="1000" />
+	</install>
+	
+	<uninstall for="2.0 - 2.0.99">
+		<modification reverse="true">install2x.xml</modification>
+		<modification reverse="true">languages.xml</modification>
+		<modification reverse="true">languages-utf8.xml</modification>
+		<redirect url="$scripturl?action=admin;area=packages;sa=browse" timeout="1000" />
+	</uninstall>
+	
+</package-info>

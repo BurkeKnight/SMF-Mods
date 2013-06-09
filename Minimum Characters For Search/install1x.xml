@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for Minimum characters for search
+ * @version 1.2.1
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ * Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Portions created by the Initial Developer are Copyright (C) 2011
+ * the Initial Developer. All Rights Reserved.
+ *
+ */
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+	<id>sid2varun:MinCharReqSearch</id>
+	<version>1.2.1</version>
+	
+	<file name="$sourcedir/ManageSearch.php">
+		<operation>
+			<search position="replace"><![CDATA['search_max_results' => (int) $_POST['search_max_results'],
+		));]]></search>
+			<add><![CDATA['search_max_results' => (int) $_POST['search_max_results'],
+			'search_min_char' => (int) $_POST['search_min_char'],
+		));]]></add>
+		</operation>
+	</file>
+	
+	<file name="$sourcedir/Search.php">
+		<operation>
+			<search position="replace"><![CDATA[if (($searchArray[$index] = trim($value, '-_\' ')) === '' || in_array($searchArray[$index], $blacklisted_words))
+			unset($searchArray[$index]);
+		else
+			$searchArray[$index] = addslashes($searchArray[$index]);]]></search>
+			<add><![CDATA[if (($searchArray[$index] = trim($value, '-_\' ')) === '' || in_array($searchArray[$index], $blacklisted_words))
+			unset($searchArray[$index]);
+		elseif ($func['strlen']($value) < (!empty($modSettings['search_min_char']) ? $modSettings['search_min_char'] : 2))
+		{
+			$context['search_errors']['search_string_small_words'] = true;
+			unset($searchArray[$index]);
+		}
+		else
+			$searchArray[$index] = addslashes($searchArray[$index]);]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[
+	// Make sure the excluded words are in all or-branches.]]></search>
+			<add><![CDATA[
+	// Don't allow duplicate error messages if one string is too short.
+	if (isset($context['search_errors']['search_string_small_words'], $context['search_errors']['invalid_search_string']))
+		unset($context['search_errors']['invalid_search_string']);
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$themedir/ManageSearch.template.php">
+		<operation>
+			<search position="replace"><![CDATA[</tr><tr class="windowbg2">
+				<th align="right">
+					<label for="search_max_results_input">', $txt['search_max_results'], ':</label>
+					<div class="smalltext" style="font-weight: normal;">', $txt['search_max_results_disable'], '</div>
+				</th>
+				<td valign="top"><input type="text" name="search_max_results" id="search_max_results_input" value="', empty($modSettings['search_max_results']) ? '0' : $modSettings['search_max_results'], '" size="10" /></td>]]></search>
+			<add><![CDATA[</tr><tr class="windowbg2">
+				<th align="right">
+					<label for="search_max_results_input">', $txt['search_max_results'], ':</label>
+					<div class="smalltext" style="font-weight: normal;">', $txt['search_max_results_disable'], '</div>
+				</th>
+				<td valign="top"><input type="text" name="search_max_results" id="search_max_results_input" value="', empty($modSettings['search_max_results']) ? '0' : $modSettings['search_max_results'], '" size="10" /></td>
+			</tr><tr class="windowbg2">
+				<th align="right">
+					<label for="search_min_char_input">', $txt['search_min_char'], ':</label>
+					<div class="smalltext" style="font-weight: normal;">', $txt['default_search_min_char'], '</div>
+				</th>
+				<td valign="top"><input type="text" name="search_min_char" id="search_min_char_input" value="', empty($modSettings['search_min_char']) ? '0' : $modSettings['search_min_char'], '" size="10" /></td>]]></add>
+		</operation>
+	</file>
+	
+	<file name="$themedir/Search.template.php">
+		<operation>
+			<search position="replace"><![CDATA[', implode('<br />', $context['search_errors']['messages']), ']]></search>
+			<add><![CDATA[', implode('<br />', $context['search_errors']['messages']), (!empty($modSettings['search_min_char']) ? $modSettings['search_min_char'] : 2), ']]></add>
+		</operation>
+	</file>
+	
+</modification>
