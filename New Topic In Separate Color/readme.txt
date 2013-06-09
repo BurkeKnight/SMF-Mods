@@ -1,0 +1,1 @@
+This mod will show new topics on message index in a seperate color.Instead of an icon, they will appear in a different color that the already read ones.

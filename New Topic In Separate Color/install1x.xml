@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for New Topic in Different Color
+ * @version 1.3
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ * Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Portions created by the Initial Developer are Copyright (C) 2011
+ * the Initial Developer. All Rights Reserved.
+ *
+ */
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:newtopiccolor</id>
+	<version>1.3</version>
+
+	<file name="$themedir/style.css">
+		<operation>
+			<search position="after"><![CDATA[.windowbg, #preview_body
+{
+	color: #000000;
+	background-color: #ECEDF3;
+}
+]]></search>
+			<add><![CDATA[.new_posts
+{
+	background-color: #a6bdcc;
+}
+.new_posts2
+{
+	background-color: #cad8e1;
+}
+]]></add>
+		</operation>
+</file>
+
+
+	<file name="$themedir/MessageIndex.template.php">
+		<operation>
+			<search position="repalce"><![CDATA[			echo '
+					<tr>
+						<td class="windowbg2" valign="middle" align="center" width="5%">
+							<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
+						</td>
+						<td class="windowbg2" valign="middle" align="center" width="4%">
+							<img src="', $topic['first_post']['icon_url'], '" alt="" />
+						</td>
+						<td class="windowbg' , !empty($settings['seperate_sticky_lock']) && $topic['is_sticky'] ? '3' : '' , '" valign="middle" ', (!empty($topic['quick_mod']['remove']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\', \'' . $context['session_id'] . '\');"' : ''), '>';
+
+			if (!empty($settings['seperate_sticky_lock']))
+				echo '
+							' , $topic['is_locked'] ? '<img src="' . $settings['images_url'] . '/icons/quick_lock.gif" align="right" alt="" id="lockicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '' , '
+							' , $topic['is_sticky'] ? '<img src="' . $settings['images_url'] . '/icons/show_sticky.gif" align="right" alt="" id="stickyicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '';
+
+			echo '
+							', $topic['is_sticky'] ? '<b>' : '' , '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], '</span>', $topic['is_sticky'] ? '</b>' : '';
+
+			// Is this topic new? (assuming they are logged in!)
+			if ($topic['new'] && $context['user']['is_logged'])
+					echo '
+							<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/', $context['user']['language'], '/new.gif" alt="', $txt[302], '" /></a>';
+
+			echo '
+							<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+						</td>
+						<td class="windowbg2" valign="middle" width="14%">
+							', $topic['first_post']['member']['link'], '
+						</td>
+						<td class="windowbg' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['replies'], '
+						</td>
+						<td class="windowbg' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['views'], '
+						</td>
+						<td class="windowbg2" valign="middle" width="22%">
+							<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt[111], '" title="', $txt[111], '" style="float: right;" /></a>
+							<span class="smalltext">
+								', $topic['last_post']['time'], '<br />
+								', $txt[525], ' ', $topic['last_post']['member']['link'], '
+							</span>
+						</td>';
+]]></search>
+			<add><![CDATA[			// Is this topic new? (assuming they are logged in!)
+			if ($topic['new'])
+			{
+			echo '
+					<tr>
+						<td class="new_posts2" valign="middle" align="center" width="5%">
+							<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
+						</td>
+						<td class="new_posts2" valign="middle" align="center" width="4%">
+							<img src="', $topic['first_post']['icon_url'], '" alt="" />
+						</td>
+						<td class="new_posts' , !empty($settings['seperate_sticky_lock']) && $topic['is_sticky'] ? '3' : '' , '" valign="middle" ', (!empty($topic['quick_mod']['remove']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\', \'' . $context['session_id'] . '\');"' : ''), '>';
+
+			if (!empty($settings['seperate_sticky_lock']))
+				echo '
+							' , $topic['is_locked'] ? '<img src="' . $settings['images_url'] . '/icons/quick_lock.gif" align="right" alt="" id="lockicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '' , '
+							' , $topic['is_sticky'] ? '<img src="' . $settings['images_url'] . '/icons/show_sticky.gif" align="right" alt="" id="stickyicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '';
+
+			echo '
+							', $topic['is_sticky'] ? '<b>' : '' , '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], '</span>', $topic['is_sticky'] ? '</b>' : '';
+
+			if ($topic['new'] && $context['user']['is_logged'])
+			echo '
+						<a class="new_posts" href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/', $context['user']['language'], '/new.gif" alt="', $txt[302], '" /></a>';
+
+			echo '
+							<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+						</td>
+						<td class="new_posts2" valign="middle" width="14%">
+							', $topic['first_post']['member']['link'], '
+						</td>
+						<td class="new_posts' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['replies'], '
+						</td>
+						<td class="new_posts' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['views'], '
+						</td>
+						<td class="new_posts2" valign="middle" width="22%">
+							<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt[111], '" title="', $txt[111], '" style="float: right;" /></a>
+							<span class="smalltext">
+								', $topic['last_post']['time'], '<br />
+								', $txt[525], ' ', $topic['last_post']['member']['link'], '
+							</span>
+						</td>';
+			}
+			
+			else
+			{
+			echo '
+					<tr>
+						<td class="windowbg2" valign="middle" align="center" width="5%">
+							<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
+						</td>
+						<td class="windowbg2" valign="middle" align="center" width="4%">
+							<img src="', $topic['first_post']['icon_url'], '" alt="" />
+						</td>
+						<td class="windowbg' , !empty($settings['seperate_sticky_lock']) && $topic['is_sticky'] ? '3' : '' , '" valign="middle" ', (!empty($topic['quick_mod']['remove']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\', \'' . $context['session_id'] . '\');"' : ''), '>';
+
+			if (!empty($settings['seperate_sticky_lock']))
+				echo '
+							' , $topic['is_locked'] ? '<img src="' . $settings['images_url'] . '/icons/quick_lock.gif" align="right" alt="" id="lockicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '' , '
+							' , $topic['is_sticky'] ? '<img src="' . $settings['images_url'] . '/icons/show_sticky.gif" align="right" alt="" id="stickyicon' . $topic['first_post']['id'] . '" style="margin: 0;" />' : '';
+
+			echo '
+							', $topic['is_sticky'] ? '<b>' : '' , '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], '</span>', $topic['is_sticky'] ? '</b>' : '';
+
+			echo '
+							<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+						</td>
+						<td class="windowbg2" valign="middle" width="14%">
+							', $topic['first_post']['member']['link'], '
+						</td>
+						<td class="windowbg' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['replies'], '
+						</td>
+						<td class="windowbg' , $topic['is_sticky'] ? '3' : '' , '" valign="middle" width="4%" align="center">
+							', $topic['views'], '
+						</td>
+						<td class="windowbg2" valign="middle" width="22%">
+							<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt[111], '" title="', $txt[111], '" style="float: right;" /></a>
+							<span class="smalltext">
+								', $topic['last_post']['time'], '<br />
+								', $txt[525], ' ', $topic['last_post']['member']['link'], '
+							</span>
+						</td>';
+			}
+]]></add>
+		</operation>
+</file>
+</modification>

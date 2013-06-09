@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for New Topic in Different Color
+ * @version 1.3
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ * Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Portions created by the Initial Developer are Copyright (C) 2011
+ * the Initial Developer. All Rights Reserved.
+ *
+ */
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+ 
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:newtopiccolor</id>
+	<version>1.3</version>
+
+	<file name="$themedir/css/index.css">
+		<operation>
+			<search position="after"><![CDATA[/* Sticky topics get a different background */
+]]></search>
+			<add><![CDATA[
+/* New topics get a different background */
+.new
+{
+	background: #a0b9c9;
+}
+.new2
+{
+	background: #baccd8;
+}
+
+]]></add>
+		</operation>
+</file>
+
+
+	<file name="$themedir/MessageIndex.template.php">
+		<operation>
+			<search position="repalce"><![CDATA[			// Is this topic pending approval, or does it have any posts pending approval?
+			if ($context['can_approve_posts'] && $topic['unapproved_posts'])
+				$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
+			// We start with locked and sticky topics.
+			elseif ($topic['is_sticky'] && $topic['is_locked'])
+				$color_class = 'stickybg locked_sticky';
+			// Sticky topics should get a different color, too.
+			elseif ($topic['is_sticky'])
+				$color_class = 'stickybg';
+			// Locked topics get special treatment as well.
+			elseif ($topic['is_locked'])
+				$color_class = 'lockedbg';
+			// Last, but not least: regular topics.
+			else
+				$color_class = 'windowbg';
+
+			// Some columns require a different shade of the color class.
+			$alternate_class = $color_class . '2';
+]]></search>
+			<add><![CDATA[			if ($topic['new'])
+			 $color_class = 'new';
+			// Is this topic pending approval, or does it have any posts pending approval?
+			elseif ($context['can_approve_posts'] && $topic['unapproved_posts'])
+				$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
+			// We start with locked and sticky topics.
+			elseif ($topic['is_sticky'] && $topic['is_locked'])
+				$color_class = 'stickybg locked_sticky';
+			// Sticky topics should get a different color, too.
+			elseif ($topic['is_sticky'])
+				$color_class = 'stickybg';
+			// Locked topics get special treatment as well.
+			elseif ($topic['is_locked'])
+				$color_class = 'lockedbg';
+			// Last, but not least: regular topics.
+			else
+				$color_class = 'windowbg';
+
+			// Some columns require a different shade of the color class.
+			$alternate_class = $color_class . '2';
+]]></add>
+		</operation>
+		<operation>
+			<search position="repalce"><![CDATA[			// Is this topic new? (assuming they are logged in!)
+			if ($topic['new'] && $context['user']['is_logged'])
+					echo '
+							<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+]]></search>
+			<add><![CDATA[			// Is this topic new? (assuming they are logged in!)
+			if ($topic['new'] && $context['user']['is_logged'])
+					echo '
+							<a class="new" href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>'; 
+]]></add>
+		</operation>
+</file>
+</modification>
