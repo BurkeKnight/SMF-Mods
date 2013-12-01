@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:allowdenyboard</id>
+	<name>Allow Deny Boards</name>
+	<version>1.0</version>
+	<type>modification</type>
+
+	<install for="2.0 - 2.0.99">
+		<database>DB.php</database>
+		<modification format="xml" type="file">Modification.xml</modification>
+		<readme type="file" parsebbc="true">readme.txt</readme>
+	</install>
+
+
+	<uninstall for="2.0 - 2.0.99">
+		<modification type="file" reverse="true">Modification.xml</modification>
+		<redirect url="$scripturl?action=admin;area=packages;sa=browse" timeout="1000" />
+	</uninstall>
+
+</package-info>

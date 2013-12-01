@@ -1,0 +1,460 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+ * @package manifest file for Allow Deny Board permissions
+ * @version 1.0
+ * @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * @copyright Copyright (c) 2012, Siddhartha Gupta
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ */
+
+/*
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+ * Portions created by the Initial Developer are Copyright (C) 2012
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ */
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<id>sid2varun:allowdenyboard</id>
+<version>1.0</version>
+
+	<file name="$themedir/ManageBoards.template.php">
+		<operation>
+			<search position="replace"><![CDATA[	// List all the membergroups so the user can choose who may access this board.
+	foreach ($context['groups'] as $group)
+		echo '
+							<label for="groups_', $group['id'], '">
+								<input type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="input_check" />
+								<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : '', $group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : '', '>
+									', $group['name'], '
+								</span>
+							</label><br />';
+	echo '
+							<em>', $txt['check_all'], '</em> <input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'groups[]\');" /><br />
+							<br />
+						</dd>';]]></search>
+			<add><![CDATA[	// List all the membergroups so the user can choose who may access this board.
+	foreach ($context['groups'] as $group)
+		echo '
+							<label for="groups_', $group['id'], '">
+								<input type="checkbox" name="groups[]" value="', $group['id'], '" id="groups_', $group['id'], '"', $group['checked'] ? ' checked="checked"' : '', ' class="input_check" ', !empty($modSettings['enable_allow_deny']) ? 'onclick="check_deny_allow('. $group['id']. ', this);"' : '', ' />
+								<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : '', $group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : '', '>
+									', $group['name'], '
+								</span>
+							</label><br />';
+	echo '
+							<em>', $txt['check_all'], '</em> <input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'groups[]\');" /><br />
+							<br />
+						</dd>';
+
+	if (!empty($modSettings['enable_allow_deny']))
+	{
+		echo'
+						<dt>
+							<strong>', $txt['deny_groups'], ':</strong><br />
+							<span class="smalltext">', $txt['deny_groups_desc'], '</span>
+						</dt>
+						<dd>';
+
+		foreach ($context['groups'] as $group)
+		echo '
+							<label for="groups_deny_', $group['id'], '">
+								<input type="checkbox" name="groups_deny[]" value="', $group['id'], '" id="groups_deny_', $group['id'], '"', $group['deny'] ? ' checked="checked"' : '', ' class="input_check" onclick="check_deny_allow('. $group['id']. ', this);" />
+								<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : '', $group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : '', '>
+									', $group['name'], '
+								</span>
+							</label><br />';
+		echo '
+							<em>', $txt['check_all'], '</em> <input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'groups_deny[]\');" /><br />
+							<br />
+						</dd>';
+	}]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[// Javascript for deciding what to show.
+	echo ']]></search>
+			<add><![CDATA[	<script type="text/javascript"><!-- // -->','<![CDATA[
+	function check_deny_allow(group_var, id)
+	{
+		if ((id == document.getElementById("groups_"+group_var)) && (id.checked == true))
+		{
+			document.getElementById("groups_deny_"+group_var).checked = false;
+		}
+		if ((id == document.getElementById("groups_deny_"+group_var)) && (id.checked == true))
+		{
+			document.getElementById("groups_"+group_var).checked = false;
+		}
+	}
+// ]]','></script>';
+
+	echo '
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$themedir/ManageMembergroups.template.php">
+		<operation>
+			<search position="replace"><![CDATA[<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boardaccess[]" id="boardaccess_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked" disabled="disabled"' : '', ' class="input_check" /> <label for="boardaccess_', $board['id'], '">', $board['name'], '</label></div>';
+
+	echo '
+								<br />
+								<input type="checkbox" id="checkall_check" class="input_check" onclick="invertAll(this, this.form, \'boardaccess\');" /> <label for="checkall_check"><em>', $txt['check_all'], '</em></label>
+							</fieldset>
+						</dd>]]></search>
+			<add><![CDATA[<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boardaccess[]" id="boardaccess_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked" disabled="disabled"' : '', ' class="input_check" ', !empty($modSettings['enable_allow_deny']) ? 'onclick="check_deny_allow('. $board['id']. ', this);"' : '', ' /> <label for="boardaccess_', $board['id'], '">', $board['name'], '</label></div>';
+
+	echo '
+								<br />
+								<input type="checkbox" id="checkall_check" class="input_check" onclick="invertAll(this, this.form, \'boardaccess\');" /> <label for="checkall_check"><em>', $txt['check_all'], '</em></label>
+							</fieldset>
+						</dd>';
+
+	if (!empty($modSettings['enable_allow_deny']))
+	{
+		echo '
+						<dt>
+							<strong>', $txt['membergroups_deny_board'], ':</strong>
+						</dt>
+						<dd>
+							<fieldset id="deny_boards">
+								<legend>', $txt['membergroups_deny_board_desc'], '</legend>';
+
+		foreach ($context['boards'] as $board)
+		echo '
+								<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boarddeny[]" id="boarddeny_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked" disabled="disabled"' : '', ' class="input_check"  onclick="check_deny_allow('. $board['id']. ', this);" /> <label for="boarddeny_', $board['id'], '">', $board['name'], '</label></div>';
+
+		echo '
+								<br />
+								<input type="checkbox" id="checkall_check" class="input_check" onclick="invertAll(this, this.form, \'boarddeny\');" /> <label for="checkall_check"><em>', $txt['check_all'], '</em></label>
+							</fieldset>
+						</dd>';
+	}
+
+	echo '
+]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[if ($context['undefined_group'])
+	{
+		echo ']]></search>
+			<add><![CDATA[
+			<script type="text/javascript"><!-- // -->','
+				function check_deny_allow(board_var, id)
+				{
+					if ((id == document.getElementById("boardaccess_"+board_var)) && (id.checked == true))
+					{
+						document.getElementById("boarddeny_"+board_var).checked = false;
+					}
+					if ((id == document.getElementById("boarddeny_"+board_var)) && (id.checked == true))
+					{
+						document.getElementById("boardaccess_"+board_var).checked = false;
+					}
+				}
+			// ]]','></script>
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[function template_edit_group()
+{
+	global $context, $settings, $options, $scripturl, $txt]]></search>
+			<add><![CDATA[, $modSettings
+]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[								<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boardaccess[]" id="boardaccess_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> <label for="boardaccess_', $board['id'], '">', $board['name'], '</label></div>';
+]]></search>
+			<add><![CDATA[								<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boardaccess[]" id="boardaccess_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" ', !empty($modSettings['enable_allow_deny']) ? 'onclick="check_deny_allow('. $board['id']. ', this);"' : '', ' /> <label for="boardaccess_', $board['id'], '">', $board['name'], '</label></div>';
+]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[</script>
+						</dd>';]]></search>
+			<add><![CDATA[</script>
+						</dd>';
+
+		if (!empty($modSettings['enable_allow_deny']))
+		{
+			echo '
+						<dt>
+							<strong>', $txt['membergroups_deny_board'], ':</strong>
+						</dt>
+						<dd>
+							<fieldset id="deny_boards" style="width: 95%;">
+								<legend><a href="javascript:void(0);" onclick="document.getElementById(\'deny_boards\').style.display = \'none\';document.getElementById(\'deny_boards_link\').style.display = \'block\'; return false;">', $txt['membergroups_deny_board_desc'], '</a></legend>';
+			foreach ($context['deny_boards'] as $board)
+			echo '
+								<div style="margin-left: ', $board['child_level'], 'em;"><input type="checkbox" name="boarddeny[]" id="boarddeny_', $board['id'], '" value="', $board['id'], '" ', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" onclick="check_deny_allow('. $board['id']. ', this);" /> <label for="boarddeny_', $board['id'], '">', $board['name'], '</label></div>';
+
+			echo '
+								<br />
+								<input type="checkbox" id="checkall_check" class="input_check" onclick="invertAll(this, this.form, \'boarddeny\');" /> <label for="checkall_check"><em>', $txt['check_all'], '</em></label>
+							</fieldset>
+							<a href="javascript:void(0);" onclick="document.getElementById(\'deny_boards\').style.display = \'block\'; document.getElementById(\'deny_boards_link\').style.display = \'none\'; return false;" id="deny_boards_link" style="display: none;">[ ', $txt['membergroups_select_visible_boards'], ' ]</a>
+							<script type="text/javascript"><!-- // -->','
+								document.getElementById("deny_boards_link").style.display = "";
+								document.getElementById("deny_boards").style.display = "none";
+							// ]]','></script>
+						</dd>';
+		}
+]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[<br class="clear" />
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?fin20"></script>]]></search>
+			<add><![CDATA[
+		<script type="text/javascript"><!-- // -->','
+			function check_deny_allow(board_var, id)
+			{
+				if ((id == document.getElementById("boardaccess_"+board_var)) && (id.checked == true))
+				{
+					document.getElementById("boarddeny_"+board_var).checked = false;
+				}
+				if ((id == document.getElementById("boarddeny_"+board_var)) && (id.checked == true))
+				{
+					document.getElementById("boardaccess_"+board_var).checked = false;
+				}
+			}
+		// ]]','></script>
+		]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/ManageBoards.php">
+		<operation>
+			<search position="after"><![CDATA[		// Change '1 & 2' to '1 &amp; 2', but not '&amp;' to '&amp;amp;'...]]></search>
+			<add><![CDATA[		$boardOptions['groups_deny'] = array();
+		if (!empty($_POST['groups_deny']))
+			foreach ($_POST['groups_deny'] as $group)
+				$boardOptions['groups_deny'][] = (int) $group;
+
+]]></add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA['member_groups' => array(0, -1),]]></search>
+			<add><![CDATA[
+			'member_groups_deny' => array(),]]></add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA['checked' => in_array('-1', $curBoard['member_groups']),]]></search>
+			<add><![CDATA[
+			'deny' => !empty($curBoard['member_groups_deny']) ? in_array('-1', $curBoard['member_groups_deny']) : '',]]></add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA['checked' => in_array('0', $curBoard['member_groups']),]]></search>
+			<add><![CDATA[
+			'deny' => !empty($curBoard['member_groups_deny']) ? in_array('0', $curBoard['member_groups_deny']) : '',]]></add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA['checked' => in_array($row['id_group'], $curBoard['member_groups']),]]></search>
+			<add><![CDATA[
+			'deny' => !empty($curBoard['member_groups_deny']) ? in_array($row['id_group'], $curBoard['member_groups_deny']) : '',]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[			array('check', 'allow_ignore_boards'),
+]]></search>
+			<add><![CDATA[			array('check', 'enable_allow_deny', 'subtext' => $txt['desc_enable_allow_deny']),
+]]></add>
+		</operation>
+	</file>
+	
+	<file name="$sourcedir/ManageMembergroups.php">
+		<operation>
+			<search position="before"><![CDATA[array(
+					'board_list' => $_POST['boardaccess'],
+					'blank_string' => '',
+					'group_id_string' => (string) $id_group,
+					'comma_group' => ',' . $id_group,
+				)
+			);]]></search>
+			<add><![CDATA[
+
+		if (!empty($modSettings['enable_allow_deny']))
+		{
+			$_POST['boarddeny'] = empty($_POST['boarddeny']) || !is_array($_POST['boarddeny']) ? array() : $_POST['boarddeny'];
+			foreach ($_POST['boarddeny'] as $key => $value)
+				$_POST['boarddeny'][$key] = (int) $value;
+
+			if (!empty($_POST['boarddeny']))
+				$smcFunc['db_query']('', '
+					UPDATE {db_prefix}boards
+					SET member_groups_deny = CASE WHEN member_groups_deny = {string:blank_string} THEN {string:group_id_string} ELSE CONCAT(member_groups_deny, {string:comma_group}) END
+					WHERE id_board IN ({array_int:board_list})',
+					array(
+						'board_list' => $_POST['boarddeny'],
+						'blank_string' => '',
+						'group_id_string' => (string) $id_group,
+						'comma_group' => ',' . $id_group,
+					)
+				);
+		}
+]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[array(
+						'board_list' => $_POST['boardaccess'],
+						'blank_string' => '',
+						'current_group' => (int) $_REQUEST['group'],
+						'group_id_string' => (string) (int) $_REQUEST['group'],
+						'comma_group' => ',' . $_REQUEST['group'],
+					)
+				);]]></search>
+			<add><![CDATA[
+			
+			if (!empty($modSettings['enable_allow_deny']))
+			{
+				$_POST['boarddeny'] = empty($_POST['boarddeny']) || !is_array($_POST['boarddeny']) ? array() : $_POST['boarddeny'];
+				foreach ($_POST['boarddeny'] as $key => $value)
+					$_POST['boarddeny'][$key] = (int) $value;
+
+				$request = $smcFunc['db_query']('', '
+					SELECT id_board, member_groups_deny
+					FROM {db_prefix}boards
+					WHERE FIND_IN_SET({string:current_group}, member_groups_deny) != 0' . (empty($_POST['boarddeny']) ? '' : '
+						AND id_board NOT IN ({array_int:board_deny_list})'),
+					array(
+						'current_group' => (int) $_REQUEST['group'],
+						'board_deny_list' => $_POST['boarddeny'],
+					)
+				);
+				while ($row = $smcFunc['db_fetch_assoc']($request))
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}boards
+						SET member_groups_deny = {string:member_groups_deny}
+						WHERE id_board = {int:current_board}',
+						array(
+							'current_board' => $row['id_board'],
+							'member_groups_deny' => implode(',', array_diff(explode(',', $row['member_groups_deny']), array($_REQUEST['group']))),
+						)
+					);
+				$smcFunc['db_free_result']($request);
+
+				if (!empty($_POST['boarddeny']))
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}boards
+						SET member_groups_deny = CASE WHEN member_groups_deny = {string:blank_string} THEN {string:group_id_string} ELSE CONCAT(member_groups_deny, {string:comma_group}) END
+						WHERE id_board IN ({array_int:board_list})
+						AND FIND_IN_SET({int:current_group}, member_groups_deny) = 0',
+						array(
+							'board_list' => $_POST['boarddeny'],
+							'blank_string' => '',
+							'current_group' => (int) $_REQUEST['group'],
+							'group_id_string' => (string) (int) $_REQUEST['group'],
+							'comma_group' => ',' . $_REQUEST['group'],
+						)
+					);
+			}
+]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[// Get a list of boards this membergroup is allowed to see.]]></search>
+			<add><![CDATA[$context['deny_boards'] = array();
+	if ($_REQUEST['group'] == 2 || $_REQUEST['group'] > 3)
+	{
+		$result = $smcFunc['db_query']('', '
+			SELECT id_board, name, child_level, FIND_IN_SET({string:current_group}, member_groups_deny) != 0 AS cant_access
+			FROM {db_prefix}boards
+			ORDER BY board_order',
+			array(
+				'current_group' => (int) $_REQUEST['group'],
+			)
+		);
+		while ($row = $smcFunc['db_fetch_assoc']($result))
+			$context['deny_boards'][] = array(
+				'id' => $row['id_board'],
+				'name' => $row['name'],
+				'child_level' => $row['child_level'],
+				'selected' => !(empty($row['cant_access']) || $row['cant_access'] == 'f'),
+			);
+		$smcFunc['db_free_result']($result);
+	}
+	]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/Subs-Boards.php">
+		<operation>
+		<search position="before"><![CDATA[	if (isset($boardOptions['access_groups']))
+	{
+		$boardUpdates[] = 'member_groups = {string:member_groups}';
+		$boardUpdateParameters['member_groups'] = implode(',', $boardOptions['access_groups']);
+	}]]></search>
+			<add><![CDATA[	
+	if (isset($boardOptions['groups_deny']))
+	{
+		$boardUpdates[] = 'member_groups_deny = {string:member_groups_deny}';
+		$boardUpdateParameters['member_groups_deny'] = implode(',', $boardOptions['groups_deny']);
+	}]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[b.redirect,]]></search>
+			<add><![CDATA[ b.member_groups_deny,]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA['member_groups' => explode(',', $row['member_groups']),]]></search>
+			<add><![CDATA[
+				'member_groups_deny' => explode(',', $row['member_groups_deny']),]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/Load.php">
+		<operation>
+			<search position="replace"><![CDATA[$user_info['query_see_board'] = '(FIND_IN_SET(' . implode(', b.member_groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', b.member_groups) != 0' . (isset($user_info['mod_cache']) ? ' OR ' . $user_info['mod_cache']['mq'] : '') . ')';]]></search>
+			<add><![CDATA[$user_info['query_see_board'] = '(FIND_IN_SET(' . implode(', b.member_groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', b.member_groups) != 0' . (isset($user_info['mod_cache']) ? ' OR ' . $user_info['mod_cache']['mq'] : '') . ') '. (isset($modSettings['enable_allow_deny']) && !empty($modSettings['enable_allow_deny']) ? 'AND NOT (FIND_IN_SET(' . implode(', b.member_groups_deny) OR FIND_IN_SET(', $user_info['groups']) . ', b.member_groups_deny)' . (isset($user_info['mod_cache']) ? ' OR ' . $user_info['mod_cache']['mq'] : '') . ')' : '');]]></add>
+		</operation>
+        
+        <operation>
+			<search position="before"><![CDATA[b.id_theme, b.override_theme, b.count_posts, b.id_profile, b.redirect,]]></search>
+			<add><![CDATA[ b.member_groups_deny,]]></add>
+		</operation>
+        
+        <operation>
+			<search position="before"><![CDATA['cur_topic_starter' => empty($topic) ? 0 : $row['id_member_started'],]]></search>
+			<add><![CDATA[
+				'member_groups_deny' => !empty($row['member_groups_deny']) ? explode($row['member_groups_deny'], ',') : array(),]]></add>
+		</operation>
+        
+        <operation>
+			<search position="before"><![CDATA[if (count(array_intersect($user_info['groups'], $board_info['groups'])) == 0 && !$user_info['is_admin'])
+			$board_info['error'] = 'access';]]></search>
+			<add><![CDATA[
+		elseif(!empty($modSettings['enable_allow_deny']) && count($board_info['member_groups_deny']) > 0 && count(array_intersect($user_info['groups'], $board_info['member_groups_deny'])) == 0 && !$user_info['is_admin'])
+			$board_info['error'] = 'access';]]></add>
+		</operation>
+	</file>
+
+	<file name="$themedir/languages/Modifications.english.php">
+		<operation>
+			<search position="end"></search>
+			<add><![CDATA[
+$txt['enable_allow_deny'] = 'Enable allow/deny mod';
+$txt['desc_enable_allow_deny'] = 'With the help of this mod you can deny the access to boards to any member group.';
+$txt['deny_groups'] = 'Deny groups';
+$txt['deny_groups_desc'] = 'Groups not allowed to access this board.';
+$txt['membergroups_deny_board'] = 'Deny Boards';
+$txt['membergroups_deny_board_desc'] = 'Boards the membergroup can\'t see';
+]]></add>
+		</operation>
+	</file>
+
+</modification>
